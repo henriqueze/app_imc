@@ -17,7 +17,7 @@ import java.text.DecimalFormat;
 public class ActivityCadastro extends AppCompatActivity {
     EditText edtNome, edtDataNascimento, edtPeso, edtAltura;
     TextView resultadoImc, descricaoImc;
-    Button btnVariavel;
+    Button btnVariavel, btnCalcular;
 
     Pessoa pessoa, altpessoa;
     PessoaDao pessoaDao;
@@ -36,26 +36,33 @@ public class ActivityCadastro extends AppCompatActivity {
 
         edtNome = (EditText) findViewById(R.id.edtNome);
         edtDataNascimento = (EditText) findViewById(R.id.edtDataNascimento);
-        edtPeso = (EditText) findViewById(R.id.edtPeso);
         edtAltura = (EditText) findViewById(R.id.edtAltura);
+        edtPeso = (EditText) findViewById(R.id.edtPeso);
         resultadoImc = (TextView) findViewById(R.id.ResultadoImc);
         descricaoImc = (TextView) findViewById(R.id.DescricaoImc);
         btnVariavel = (Button) findViewById(R.id.btnVariavel);
+        btnCalcular = (Button) findViewById(R.id.btnCalcular);
 
         if (altpessoa != null){
             btnVariavel.setText("Alterar");
+            edtNome.setText(altpessoa.getNome());
+            edtDataNascimento.setText(altpessoa.getDataNascimento());
+            edtAltura.setText(altpessoa.getAltura());
+            edtPeso.setText(altpessoa.getPeso());
+            //resultadoImc.setText(altpessoa.getImc());
+
+            pessoa.setId(altpessoa.getId());
         }else{
             btnVariavel.setText("Salvar");
         }
 
-        btnVariavel.setOnClickListener(new View.OnClickListener() {
+        btnCalcular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 int peso = Integer.parseInt(edtPeso.getText().toString());
                 float altura = Float.parseFloat(edtAltura.getText().toString());
 
-                 imc[0] = peso / (altura * altura);
+                imc[0] = peso / (altura * altura);
                 if(imc[0] < 19){
                     //abaixo
                     resultadoImc.setText(imc[0]+"");
@@ -77,21 +84,35 @@ public class ActivityCadastro extends AppCompatActivity {
                     descricaoImc.setText("Obesidade");
                 }
 
+            }
+        });
+
+        btnVariavel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
                 pessoa.setNome(edtNome.getText().toString());
                 pessoa.setDataNascimento(edtDataNascimento.getText().toString());
-                pessoa.setAltura(Float.parseFloat(edtAltura.getText().toString()));
-                pessoa.setPeso(Integer.parseInt(edtPeso.getText().toString()));
+                pessoa.setAltura(edtAltura.getText().toString());
+                pessoa.setPeso(edtPeso.getText().toString());
                 pessoa.setImc(imc[0]);
 
                 if(btnVariavel.getText().toString().equals("Salvar")){
                     retornoDB = pessoaDao.salvarPessoa(pessoa);
+                    pessoaDao.close();
                     if(retornoDB == -1){
                         alert("Erro ao Cadastrar");
                     }else{
                         alert("Cadastro Realizado com Sucesso");
                     }
                 }else{
-
+                    retornoDB = pessoaDao.alterarPessoa(pessoa);
+                    pessoaDao.close();
+                    if (retornoDB == 1){
+                        alert("Erro ao Alterar");
+                    }else{
+                        alert("Atualização Realizada com Sucesso");
+                    }
                 }
 
                 finish();

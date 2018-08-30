@@ -37,8 +37,8 @@ public class PessoaDao extends SQLiteOpenHelper{
                 " "+ID+" INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 " "+NOME+" TEXT, " +
                 " "+DATANASCIMENTO+" NUMERIC, " +
-                " "+PESO+" INTEGER, " +
                 " "+ALTURA+" REAL, "+
+                " "+PESO+" INTEGER, " +
                 " "+IMC+" REAL );";
         db.execSQL(sql);
 
@@ -58,12 +58,38 @@ public class PessoaDao extends SQLiteOpenHelper{
 
         values.put(NOME, p.getNome());
         values.put(DATANASCIMENTO, p.getDataNascimento());
-        values.put(PESO, p.getPeso());
         values.put(ALTURA, p.getAltura());
+        values.put(PESO, p.getPeso());
         values.put(IMC, p.getImc());
 
 
         retornoDB = getWritableDatabase().insert(TABELA, null, values);
+
+        return retornoDB;
+    }
+
+    public long alterarPessoa(Pessoa p){
+        ContentValues values = new ContentValues();
+        long retornoDB;
+
+        values.put(NOME, p.getNome());
+        values.put(DATANASCIMENTO, p.getDataNascimento());
+        values.put(ALTURA, p.getAltura());
+        values.put(PESO, p.getPeso());
+        values.put(IMC, p.getImc());
+
+
+        String[] args = {String.valueOf(p.getId())};
+        retornoDB = getWritableDatabase().update(TABELA, values, "id=?", args);
+
+        return retornoDB;
+    }
+
+    public long excluirPessoa(Pessoa p){
+        long retornoDB;
+
+        String[] args = {String.valueOf(p.getId())};
+        retornoDB = getWritableDatabase().delete(TABELA, "id=?", args);
 
         return retornoDB;
     }
@@ -81,9 +107,9 @@ public class PessoaDao extends SQLiteOpenHelper{
             p.setId(cursor.getInt(0));
             p.setNome(cursor.getString(1));
             p.setDataNascimento(cursor.getString(2));
-            p.setAltura(cursor.getDouble(3));
-            p.setPeso(cursor.getInt(4));
-            p.setImc(cursor.getDouble(5));
+            p.setAltura(cursor.getString(3));
+            p.setPeso(cursor.getString(4));
+            p.setImc(cursor.getFloat(5));
 
             listPessoa.add(p);
         }

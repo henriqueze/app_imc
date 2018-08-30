@@ -1,17 +1,19 @@
 package com.example.henri.crud_imc.modelo;
 
+import java.io.Serializable;
+
 /**
  * Created by henri on 26/08/2018.
  */
 
-public class Pessoa {
+public class Pessoa implements Serializable{
 
     private int id;
     private String nome;
     private String dataNascimento;
-    private double altura;
-    private int peso;
-    private double imc;
+    private String altura;
+    private String peso;
+    private Float imc;
 
     public Pessoa() {
     }
@@ -40,27 +42,27 @@ public class Pessoa {
         this.dataNascimento = dataNascimento;
     }
 
-    public double getAltura() {
+    public String getAltura() {
         return altura;
     }
 
-    public void setAltura(double altura) {
+    public void setAltura(String altura) {
         this.altura = altura;
     }
 
-    public double getPeso() {
+    public String getPeso() {
         return peso;
     }
 
-    public void setPeso(int peso) {
+    public void setPeso(String peso) {
         this.peso = peso;
     }
 
-    public double getImc() {
+    public Float getImc() {
         return imc;
     }
 
-    public void setImc(double imc) {
+    public void setImc(Float imc) {
         this.imc = imc;
     }
 
