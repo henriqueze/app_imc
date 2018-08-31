@@ -1,10 +1,16 @@
 package com.example.henri.crud_imc;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.nfc.Tag;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +19,7 @@ import com.example.henri.crud_imc.dao.PessoaDao;
 import com.example.henri.crud_imc.modelo.Pessoa;
 
 import java.text.DecimalFormat;
+import java.util.Calendar;
 
 public class ActivityCadastro extends AppCompatActivity {
     EditText edtNome, edtDataNascimento, edtPeso, edtAltura;
@@ -22,6 +29,8 @@ public class ActivityCadastro extends AppCompatActivity {
     Pessoa pessoa, altpessoa;
     PessoaDao pessoaDao;
     long retornoDB;
+
+    private DatePickerDialog.OnDateSetListener mDateSetListner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +52,33 @@ public class ActivityCadastro extends AppCompatActivity {
         btnVariavel = (Button) findViewById(R.id.btnVariavel);
         btnCalcular = (Button) findViewById(R.id.btnCalcular);
 
-        edtDataNascimento.addTextChangedListener(MaskEditUtil.mask(edtDataNascimento, MaskEditUtil.FORMAT_DATE));
+        edtDataNascimento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(ActivityCadastro.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+                        mDateSetListner, year, month, day);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+            }
+        });
+
+        mDateSetListner = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+                month = month + 1;
+                String date = day + "/" + month + "/" + year;
+                edtDataNascimento.setText(date);
+
+            }
+        };
+
+        //edtDataNascimento.addTextChangedListener(MaskEditUtil.mask(edtDataNascimento, MaskEditUtil.FORMAT_DATE));
         //edtAltura.addTextChangedListener(MaskEditUtil.mask(edtAltura, MaskEditUtil.FORMAT_ALTURA));
         //edtPeso.addTextChangedListener(MaskEditUtil.mask(edtPeso,MaskEditUtil.FORMATA_PESO));
 
