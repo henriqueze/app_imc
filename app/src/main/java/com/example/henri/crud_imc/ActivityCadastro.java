@@ -80,8 +80,8 @@ public class ActivityCadastro extends AppCompatActivity {
         };
 
         //edtDataNascimento.addTextChangedListener(MaskEditUtil.mask(edtDataNascimento, MaskEditUtil.FORMAT_DATE));
-        //edtAltura.addTextChangedListener(MaskEditUtil.mask(edtAltura, MaskEditUtil.FORMAT_ALTURA));
-        //edtPeso.addTextChangedListener(MaskEditUtil.mask(edtPeso,MaskEditUtil.FORMATA_PESO));
+        edtAltura.addTextChangedListener(MaskEditUtil.mask(edtAltura, MaskEditUtil.FORMAT_ALTURA));
+        edtPeso.addTextChangedListener(MaskEditUtil.mask(edtPeso,MaskEditUtil.FORMATA_PESO));
 
         if (altpessoa != null){
             btnVariavel.setText("Alterar");
