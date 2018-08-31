@@ -15,15 +15,27 @@
             android:layout_weight="1">
 
         </ListView>
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <Button
             android:padding="10dp"
             android:layout_gravity="center"
+            android:layout_marginStart="130dp"
+            android:layout_marginTop="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
             android:text="Novo Cadastro"
             android:id="@+id/btnNovoCadastro"
             android:background="@drawable/button_novo"/>
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_margin="20dp"
+            android:src="@drawable/swipe"
+            android:layout_toRightOf="@+id/btnNovoCadastro"/>
+
+    </RelativeLayout>
 
     </LinearLayout>
