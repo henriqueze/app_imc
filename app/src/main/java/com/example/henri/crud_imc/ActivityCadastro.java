@@ -43,13 +43,17 @@ public class ActivityCadastro extends AppCompatActivity {
         btnVariavel = (Button) findViewById(R.id.btnVariavel);
         btnCalcular = (Button) findViewById(R.id.btnCalcular);
 
+        edtDataNascimento.addTextChangedListener(MaskEditUtil.mask(edtDataNascimento, MaskEditUtil.FORMAT_DATE));
+        //edtAltura.addTextChangedListener(MaskEditUtil.mask(edtAltura, MaskEditUtil.FORMAT_ALTURA));
+        //edtPeso.addTextChangedListener(MaskEditUtil.mask(edtPeso,MaskEditUtil.FORMATA_PESO));
+
         if (altpessoa != null){
             btnVariavel.setText("Alterar");
             edtNome.setText(altpessoa.getNome());
             edtDataNascimento.setText(altpessoa.getDataNascimento());
             edtAltura.setText(altpessoa.getAltura());
             edtPeso.setText(altpessoa.getPeso());
-            //resultadoImc.setText(altpessoa.getImc());
+            resultadoImc.setText(String.valueOf(altpessoa.getImc()));
 
             pessoa.setId(altpessoa.getId());
         }else{
@@ -59,31 +63,34 @@ public class ActivityCadastro extends AppCompatActivity {
         btnCalcular.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int peso = Integer.parseInt(edtPeso.getText().toString());
-                float altura = Float.parseFloat(edtAltura.getText().toString());
 
-                imc[0] = peso / (altura * altura);
-                if(imc[0] < 19){
-                    //abaixo
-                    resultadoImc.setText(imc[0]+"");
-                    descricaoImc.setText("Abaixo do Peso");
-
-                }
-                else if(imc[0] < 25){
-                    //ok
-                    resultadoImc.setText(imc[0]+"");
-                    descricaoImc.setText("Peso Adequado");
-                }
-                else if( imc[0] < 30){
-                    //sobrepeso
-                    resultadoImc.setText(imc[0]+"");
-                    descricaoImc.setText("Sobrepeso");
+                if(edtAltura.getText().length()== 0 || edtPeso.getText().length()== 0){
+                    alert("Preencha Altura e Peso");
                 }else {
-                    //obesidade
-                    resultadoImc.setText(imc[0]+"");
-                    descricaoImc.setText("Obesidade");
-                }
 
+                    int peso = Integer.parseInt(edtPeso.getText().toString());
+                    float altura = Float.parseFloat(edtAltura.getText().toString());
+
+                    imc[0] = (peso / (altura * altura));
+                    if (imc[0] < 19) {
+                        //abaixo
+                        resultadoImc.setText(imc[0] + "");
+                        descricaoImc.setText("Abaixo do Peso");
+
+                    } else if (imc[0] < 25) {
+                        //ok
+                        resultadoImc.setText(imc[0] + "");
+                        descricaoImc.setText("Peso Adequado");
+                    } else if (imc[0] < 30) {
+                        //sobrepeso
+                        resultadoImc.setText(imc[0] + "");
+                        descricaoImc.setText("Sobrepeso");
+                    } else {
+                        //obesidade
+                        resultadoImc.setText(imc[0] + "");
+                        descricaoImc.setText("Obesidade");
+                    }
+                }
             }
         });
 
@@ -97,30 +104,34 @@ public class ActivityCadastro extends AppCompatActivity {
                 pessoa.setPeso(edtPeso.getText().toString());
                 pessoa.setImc(imc[0]);
 
-                if(btnVariavel.getText().toString().equals("Salvar")){
-                    retornoDB = pessoaDao.salvarPessoa(pessoa);
-                    pessoaDao.close();
-                    if(retornoDB == -1){
-                        alert("Erro ao Cadastrar");
-                    }else{
-                        alert("Cadastro Realizado com Sucesso");
-                    }
-                }else{
-                    retornoDB = pessoaDao.alterarPessoa(pessoa);
-                    pessoaDao.close();
-                    if (retornoDB == 1){
-                        alert("Erro ao Alterar");
-                    }else{
-                        alert("Atualização Realizada com Sucesso");
-                    }
-                }
+                if(edtNome.getText().length()== 0 || edtAltura.getText().length()== 0 || edtPeso.getText().length()== 0){
+                    alert("Preencha Todos os Campos");
+                }else {
 
-                finish();
+                    if (btnVariavel.getText().toString().equals("Salvar")) {
+                        retornoDB = pessoaDao.salvarPessoa(pessoa);
+                        pessoaDao.close();
+                        if (retornoDB == -1) {
+                            alert("Erro ao Cadastrar");
+                        } else {
+                            alert("Cadastro Realizado com Sucesso");
+                        }
+                    } else {
+                        retornoDB = pessoaDao.alterarPessoa(pessoa);
+                        pessoaDao.close();
+                        if (retornoDB == -1) {
+                            alert("Erro ao Alterar");
+                        } else {
+                            alert("Atualização Realizada com Sucesso");
+                        }
+                    }
+                    finish();
+                }
             }
         });
     }
 
     private void alert(String s){
-        Toast.makeText(this, s, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
     }
 }
