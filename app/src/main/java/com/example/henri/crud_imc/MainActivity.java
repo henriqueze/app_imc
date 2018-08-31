@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -26,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
     PessoaDao pessoaDao;
     ArrayList<Pessoa> arrayListPessoa;
     ArrayAdapter<Pessoa> arrayAdapterPessoa;
+
+    float x1, x2, y1, y2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +107,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         super.onCreateContextMenu(menu, v, menuInfo);
+    }
+
+    public boolean onTouchEvent(MotionEvent touchevent){
+        switch (touchevent.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                x1 = touchevent.getX();
+                y1 = touchevent.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = touchevent.getX();
+                y2 = touchevent.getY();
+                if (x1 < x2){
+                    Intent i = new Intent(MainActivity.this, ActivityCadastro.class);
+                    startActivity(i);
+                }
+                break;
+        }
+        return false;
     }
 
     private void alert(String s){
