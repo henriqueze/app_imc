@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <img src="/img_cad.png" height="24" width="48">
+  <img src="/img_cad.png" height="400" width="711">
 </p>
 
 <p align="center">
